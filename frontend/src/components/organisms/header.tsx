@@ -74,12 +74,12 @@ export const Header = ({ activePage, setActivePage }: HeaderProps) => {
           
           {/* Desktop Auth & Quick Links */}
           <div className="hidden md:flex items-center space-x-4">
-            <a 
-              href="#" 
+            <button
+              onClick={() => handleNavClick('login')}
               className="text-sm font-bold text-primary hover:text-nhonga-700 transition-colors duration-200"
             >
               Entrar
-            </a>
+            </button>
             <div className="w-px h-4 bg-gray-300"></div>
             <div className="flex items-center text-sm text-gray-600 space-x-2">
               <a 
@@ -138,7 +138,7 @@ export const Header = ({ activePage, setActivePage }: HeaderProps) => {
               <div className="border-t border-gray-200 pt-2 mt-2">
                 <a href="#empregadores" className="text-sm text-gray-600 px-2 py-1 block rounded hover:bg-gray-50 hover:text-primary transition-colors">Empregadores</a>
                 <a href="#biscates" className="text-sm text-gray-600 px-2 py-1 block rounded hover:bg-gray-50 hover:text-primary transition-colors">Biscates</a>
-                <a href="#" className="text-sm font-bold text-primary px-2 py-1 block rounded hover:bg-gray-50 transition-colors">Entrar</a>
+                <button onClick={() => handleNavClick('login')} className="text-sm font-bold text-primary px-2 py-1 block rounded hover:bg-gray-50 transition-colors w-full text-left">Entrar</button>
               </div>
             </nav>
           </div>

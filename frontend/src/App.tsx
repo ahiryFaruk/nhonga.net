@@ -3,6 +3,7 @@ import { tabcontent as TabContent } from './components/molecules';
 import { Home } from './components/templates/Home';
 import { Publicacoes } from './components/templates/Publicacoes';
 import { SobreNos } from './components/templates/SobreNos';
+import { Login } from './pages/public/Login';
 import { useState } from 'react';
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
   const [activePage, setActivePage] = useState('home');
 
   const renderContent = () => {
+    if (activePage === 'login') return <Login />;
     if (activePage === 'publicacoes') return <Publicacoes />;
     if (activePage === 'sobre') return <SobreNos />;
     if (activePage === 'home') return <Home />;
@@ -29,12 +31,16 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white">
-      <TopHeader activeTab={activeTab} setActiveTab={setActiveTab} onTabClick={handleTabNavigation} />
-      <Header activePage={activePage} setActivePage={handlePageChange} />
+      {activePage !== 'login' && (
+        <>
+          <TopHeader activeTab={activeTab} setActiveTab={setActiveTab} onTabClick={handleTabNavigation} />
+          <Header activePage={activePage} setActivePage={handlePageChange} />
+        </>
+      )}
       <main>
         {renderContent()}
       </main>
-      {footer()}
+      {activePage !== 'login' && footer()}
     </div>
   )
 }
