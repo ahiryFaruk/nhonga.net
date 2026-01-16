@@ -37,6 +37,12 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
           }`}
         />
         <div className="absolute inset-0 bg-gradient-to-br from-nhonga-600/40 to-nhonga-900/60 transition-opacity duration-700"></div>
+        
+        {/* Logo at top left */}
+        <div className="absolute top-8 left-8 z-10">
+          <img src={logo} alt="nhonga.net" className="h-10 brightness-0 invert" />
+        </div>
+        
         <div className={`absolute inset-0 flex items-center justify-center p-12 transition-all duration-700 ${
           view === 'login' ? 'opacity-100 translate-y-0' : 'opacity-100 -translate-y-2'
         }`}>
