@@ -4,9 +4,10 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   icon?: ReactNode;
   error?: string;
+  helperText?: string;
 }
 
-export const Input = ({ label, icon, error, className = '', ...props }: InputProps) => {
+export const Input = ({ label, icon, error, helperText, className = '', ...props }: InputProps) => {
   return (
     <div className="w-full">
       {label && <label className="block text-sm text-gray-700 mb-2">{label}</label>}
@@ -18,6 +19,7 @@ export const Input = ({ label, icon, error, className = '', ...props }: InputPro
         {icon && <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">{icon}</div>}
       </div>
       {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+      {helperText && !error && <p className="text-gray-500 text-xs mt-1">{helperText}</p>}
     </div>
   );
 };

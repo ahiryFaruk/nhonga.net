@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft, User, Building2, Briefcase } from 'lucide-react';
 import logo from '/src/assets/icons/logo.png';
 import { Input } from '../../components/atoms/input';
 import { button as Button } from '../../components/atoms/button';
@@ -9,7 +9,7 @@ interface AuthProps {
 }
 
 export const Auth = ({ initialView = 'login' }: AuthProps) => {
-  const [view, setView] = useState<'login' | 'register'>(initialView);
+  const [view, setView] = useState<'login' | 'register' | 'username' | 'accountType'>(initialView);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
@@ -20,6 +20,26 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
     password: '',
     confirmPassword: ''
   });
+  const [username, setUsername] = useState('');
+  const [accountType, setAccountType] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (action: () => void) => {
+    setIsLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    action();
+    setIsLoading(false);
+  };
+
+  const generateSuggestions = () => {
+    const first = registerData.firstName.toLowerCase();
+    const last = registerData.lastName.toLowerCase();
+    return [
+      `${first}${last.charAt(0)}`,
+      `${first}_${last}`,
+      `${first}.${last}`
+    ].filter(s => s.length >= 3);
+  };
 
   return (
     <div className="min-h-screen bg-white flex">
@@ -135,8 +155,16 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
                   </a>
                 </div>
 
-                <Button type="submit" variant="secondary" size="sm" className="w-full">
-                  Login
+                <Button type="submit" variant="secondary" size="sm" className={`w-full ${isLoading ? '!bg-transparent' : ''}`} disabled={isLoading}>
+                  {isLoading ? (
+                    <span className="flex items-center justify-center gap-1.5">
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '100ms' }}></span>
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '200ms' }}></span>
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '400ms' }}></span>
+                    </span>
+                  ) : 'Login'}
                 </Button>
               </form>
 
@@ -150,7 +178,7 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
                 </button>
               </p>
             </>
-          ) : (
+          ) : view === 'register' ? (
             <>
               <h1 className="text-xl font-gt-walsheim font-bold text-gray-800 mb-6">Criar Conta</h1>
 
@@ -179,7 +207,7 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
                 <div className="flex-1 h-px bg-gray-300"></div>
               </div>
 
-              <form className="space-y-3">
+              <form className="space-y-3" onSubmit={(e) => { e.preventDefault(); setView('username'); }}>
                 <Input
                   label="Nome"
                   type="text"
@@ -250,8 +278,16 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
                   <a href="#" className="text-blue-600 hover:underline">Privacidade</a>
                 </p>
 
-                <Button type="submit" variant="secondary" size="sm" className="w-full">
-                  Criar Conta
+                <Button type="submit" variant="secondary" size="sm" className={`w-full ${isLoading ? '!bg-transparent' : ''}`} disabled={isLoading}>
+                  {isLoading ? (
+                    <span className="flex items-center justify-center gap-1.5">
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '100ms' }}></span>
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '200ms' }}></span>
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '400ms' }}></span>
+                    </span>
+                  ) : 'Criar Conta'}
                 </Button>
               </form>
 
@@ -265,16 +301,186 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
                 </button>
               </p>
             </>
+          ) : view === 'username' ? (
+            <>
+              <h1 className="text-xl font-gt-walsheim font-bold text-gray-800 mb-6">Escolha um nome de usuário</h1>
+              <p className="text-sm text-gray-600 mb-2">
+                O seu nome de usuário será usado para identificá-lo na plataforma.
+              </p>
+              <p className="text-xs text-amber-600 mb-6 font-medium">
+                Nota: O nome de usuário não pode ser alterado após a escolha.
+              </p>
+
+              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                <Input
+                  label="Nome de usuário"
+                  type="text"
+                  placeholder="@nomedeusuario"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  helperText="Apenas letras, números e underscores. Mínimo 3 caracteres."
+                />
+
+                <div>
+                  <p className="text-xs text-gray-600 mb-2">Sugestões:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {generateSuggestions().map((suggestion, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setUsername(suggestion)}
+                        className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition-colors"
+                      >
+                        @{suggestion}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <Button type="submit" variant="secondary" size="sm" className={`w-full ${isLoading ? '!bg-transparent' : ''}`} onClick={() => handleSubmit(() => setView('accountType'))} disabled={isLoading}>
+                  {isLoading ? (
+                    <span className="flex items-center justify-center gap-1.5">
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '100ms' }}></span>
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '200ms' }}></span>
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '400ms' }}></span>
+                    </span>
+                  ) : 'Próximo'}
+                </Button>
+              </form>
+
+              <p className="text-center text-xs text-gray-600 mt-6">
+                <button
+                  onClick={() => setView('register')}
+                  className="text-blue-600 hover:underline font-medium inline-flex items-center gap-1"
+                >
+                  <ArrowLeft className="w-3 h-3" />
+                  Voltar
+                </button>
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 className="text-xl font-gt-walsheim font-bold text-gray-800 mb-6">Selecione o tipo de conta</h1>
+              <p className="text-sm text-gray-600 mb-6">
+                Escolha o tipo de conta que melhor se adequa ao seu perfil.
+              </p>
+
+              <div className="space-y-3">
+                <button
+                  type="button"
+                  onClick={() => setAccountType('professional')}
+                  className={`group w-full p-6 rounded-2xl text-left transition-all duration-300 backdrop-blur-sm relative overflow-hidden ${
+                    accountType === 'professional' 
+                      ? 'bg-gradient-to-br from-nhonga-500/25 to-nhonga-600/35 border-2 border-nhonga-500 shadow-xl shadow-nhonga-500/25 scale-[1.02]' 
+                      : 'bg-white/70 border-2 border-gray-200/80 hover:bg-white/90 hover:border-nhonga-400 hover:shadow-lg hover:scale-[1.01]'
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className={`p-3 rounded-xl transition-all ${
+                      accountType === 'professional'
+                        ? 'bg-nhonga-500 text-white shadow-lg shadow-nhonga-500/30'
+                        : 'bg-gray-100 text-gray-600 group-hover:bg-nhonga-100 group-hover:text-nhonga-600'
+                    }`}>
+                      <User className="w-6 h-6" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-bold text-gray-800 mb-2 text-lg">Profissional</h3>
+                      <p className="text-sm text-gray-600 leading-relaxed">Para quem procura oportunidades de emprego e networking</p>
+                    </div>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setAccountType('company')}
+                  className={`group w-full p-6 rounded-2xl text-left transition-all duration-300 backdrop-blur-sm relative overflow-hidden ${
+                    accountType === 'company' 
+                      ? 'bg-gradient-to-br from-nhonga-500/25 to-nhonga-600/35 border-2 border-nhonga-500 shadow-xl shadow-nhonga-500/25 scale-[1.02]' 
+                      : 'bg-white/70 border-2 border-gray-200/80 hover:bg-white/90 hover:border-nhonga-400 hover:shadow-lg hover:scale-[1.01]'
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className={`p-3 rounded-xl transition-all ${
+                      accountType === 'company'
+                        ? 'bg-nhonga-500 text-white shadow-lg shadow-nhonga-500/30'
+                        : 'bg-gray-100 text-gray-600 group-hover:bg-nhonga-100 group-hover:text-nhonga-600'
+                    }`}>
+                      <Building2 className="w-6 h-6" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-bold text-gray-800 mb-2 text-lg">Empresa</h3>
+                      <p className="text-sm text-gray-600 leading-relaxed">Para empresas que procuram talentos e parceiros</p>
+                    </div>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setAccountType('freelancer')}
+                  className={`group w-full p-6 rounded-2xl text-left transition-all duration-300 backdrop-blur-sm relative overflow-hidden ${
+                    accountType === 'freelancer' 
+                      ? 'bg-gradient-to-br from-nhonga-500/25 to-nhonga-600/35 border-2 border-nhonga-500 shadow-xl shadow-nhonga-500/25 scale-[1.02]' 
+                      : 'bg-white/70 border-2 border-gray-200/80 hover:bg-white/90 hover:border-nhonga-400 hover:shadow-lg hover:scale-[1.01]'
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className={`p-3 rounded-xl transition-all ${
+                      accountType === 'freelancer'
+                        ? 'bg-nhonga-500 text-white shadow-lg shadow-nhonga-500/30'
+                        : 'bg-gray-100 text-gray-600 group-hover:bg-nhonga-100 group-hover:text-nhonga-600'
+                    }`}>
+                      <Briefcase className="w-6 h-6" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-bold text-gray-800 mb-2 text-lg">Freelancer</h3>
+                      <p className="text-sm text-gray-600 leading-relaxed">Para prestadores de serviços autónomos</p>
+                    </div>
+                  </div>
+                </button>
+              </div>
+
+              <Button 
+                variant="secondary" 
+                size="sm" 
+                className={`w-full mt-6 ${isLoading ? '!bg-transparent' : ''}`}
+                disabled={!accountType || isLoading}
+                onClick={() => handleSubmit(() => { /* Handle final submission */ })}
+              >
+                {isLoading ? (
+                  <span className="flex items-center justify-center gap-1.5">
+                    <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                    <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '100ms' }}></span>
+                    <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '200ms' }}></span>
+                    <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                    <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '400ms' }}></span>
+                  </span>
+                ) : 'Concluir Registo'}
+              </Button>
+
+              <p className="text-center text-xs text-gray-600 mt-6">
+                <button
+                  onClick={() => setView('username')}
+                  className="text-blue-600 hover:underline font-medium inline-flex items-center gap-1"
+                >
+                  <ArrowLeft className="w-3 h-3" />
+                  Voltar
+                </button>
+              </p>
+            </>
           )}
 
-          <div className="flex items-center justify-center gap-3 mt-8 pt-6 border-t border-gray-200">
-            <a href="#" className="hover:opacity-80 transition-opacity">
-              <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store" className="h-9" />
-            </a>
-            <a href="#" className="hover:opacity-80 transition-opacity">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" className="h-9" />
-            </a>
-          </div>
+          {view === 'login' && (
+            <div className="flex items-center justify-center gap-3 mt-8 pt-6 border-t border-gray-200">
+              <a href="#" className="hover:opacity-80 transition-opacity">
+                <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store" className="h-9" />
+              </a>
+              <a href="#" className="hover:opacity-80 transition-opacity">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" className="h-9" />
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </div>
