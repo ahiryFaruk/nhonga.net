@@ -16,7 +16,7 @@ function App() {
     if (activePage === 'publicacoes') return <Publicacoes />;
     if (activePage === 'sobre') return <SobreNos />;
     if (activePage === 'home') return <Home />;
-    return <TabContent activeTab={activeTab} />;
+    return <TabContent activeTab={activeTab || ''} />;
   };
 
   const handlePageChange = (page: string) => {
