@@ -7,7 +7,7 @@ import { Auth } from './pages/public/Auth';
 import { useState } from 'react';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('empregos');
+  const [activeTab, setActiveTab] = useState<string | null>(null);
   const [activePage, setActivePage] = useState('home');
 
   const renderContent = () => {
@@ -22,7 +22,7 @@ function App() {
   const handlePageChange = (page: string) => {
     setActivePage(page);
     if (page === 'home') {
-      setActiveTab('empregos');
+      setActiveTab(null);
     }
   };
 

@@ -8,8 +8,8 @@ const tabs = [
 ];
 
 interface TopHeaderProps {
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
+  activeTab: string | null;
+  setActiveTab: (tab: string | null) => void;
   onTabClick: () => void;
 }
 
@@ -26,10 +26,10 @@ export const TopHeader = ({ activeTab, setActiveTab, onTabClick }: TopHeaderProp
             <div key={tab.id} className="flex items-center">
               <button
                 onClick={() => handleTabClick(tab.id)}
-                className={`px-3 py-2 border-b-2 transition-all duration-200 ${
+                className={`px-3 py-2 border-b-2 transition-all duration-200 font-medium ${
                   activeTab === tab.id
-                    ? 'text-white bg-nhonga-900 border-primary'
-                    : 'text-nhonga-300 hover:text-white hover:bg-nhonga-900/50 border-transparent'
+                    ? 'text-white bg-nhonga-900 border-nhonga-500'
+                    : 'text-nhonga-400 hover:text-nhonga-200 hover:bg-nhonga-900/50 border-transparent'
                 }`}
               >
                 {tab.label}
