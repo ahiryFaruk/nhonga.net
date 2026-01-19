@@ -4,11 +4,17 @@ import { signAccessToken, signRefreshToken } from "../../utils/jwt.js";
 import { generateOtp } from "./otpService.js";
 import { sendOtpEmail } from "./emailService.js";
 
-export const register = async ({ email, phone, password, accountType }) => {
+export const register = async ({ firstName, lastName, email, phone, username, password, accountType }) => {
+    // Verificar se username já existe
+    if (username) {
+        const existingUser = await prisma.user.findUnique({ where: { username } });
+        if (existingUser) throw new Error("Nome de usuário já existe");
+    }
+
     const passwordHash = await hashPassword(password);
 
     const user = await prisma.user.create({
-        data: { email, phone, passwordHash, accountType },
+        data: { email, phone, username, passwordHash, accountType },
     });
 
     const otp = await generateOtp({ userId: user.id, email, phone });
@@ -16,10 +22,10 @@ export const register = async ({ email, phone, password, accountType }) => {
     if (email) await sendOtpEmail(email, otp);
     // SMS → integração futura
 
-    return { message: "OTP enviado" };
+    return { message: "OTP enviado", userId: user.id, firstName, lastName };
 };
 
-export const verifyOtp = async ({ email, phone, otp }) => {
+export const verifyOtp = async ({ email, phone, otp, firstName, lastName }) => {
     const record = await prisma.otpVerification.findFirst({
         where: {
             email,
@@ -34,10 +40,24 @@ export const verifyOtp = async ({ email, phone, otp }) => {
     const valid = await comparePassword(otp, record.otpHash);
     if (!valid) throw new Error("OTP incorreto");
 
-    await prisma.user.update({
+    // Atualizar usuário e criar perfil
+    const user = await prisma.user.update({
         where: { id: record.userId },
         data: { isVerified: true },
+        include: { profile: true },
     });
+
+    // Criar perfil se não existir
+    if (!user.profile && firstName && lastName) {
+        await prisma.profile.create({
+            data: {
+                userId: user.id,
+                firstName,
+                lastName,
+                fullName: `${firstName} ${lastName}`,
+            },
+        });
+    }
 
     await prisma.otpVerification.deleteMany({
         where: { userId: record.userId },
@@ -49,7 +69,7 @@ export const verifyOtp = async ({ email, phone, otp }) => {
 export const login = async ({ identifier, password }) => {
     const user = await prisma.user.findFirst({
         where: {
-            OR: [{ email: identifier }, { phone: identifier }],
+            OR: [{ email: identifier }, { phone: identifier }, { username: identifier }],
         },
     });
 
