@@ -80,7 +80,6 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
       });
       
       setTempData({ firstName: registerData.firstName, lastName: registerData.lastName, email: registerData.email });
-      alert('Conta criada! Verifique o console do servidor para o código OTP.');
       setView('otp');
     } catch (err: any) {
       setError(err.message);
@@ -101,7 +100,6 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
         lastName: tempData?.lastName,
       });
       
-      alert('Conta verificada com sucesso! Pode fazer login.');
       setView('login');
     } catch (err: any) {
       setError(err.message);
