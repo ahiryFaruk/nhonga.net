@@ -10,7 +10,7 @@ interface AuthProps {
 }
 
 export const Auth = ({ initialView = 'login' }: AuthProps) => {
-  const [view, setView] = useState<'login' | 'register' | 'username' | 'accountType' | 'otp'>(initialView);
+  const [view, setView] = useState<'login' | 'register' | 'username' | 'accountType' | 'otp' | 'forgotPassword'>(initialView);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
@@ -28,6 +28,7 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
   const [error, setError] = useState('');
   const [tempData, setTempData] = useState<any>(null);
   const [otpCode, setOtpCode] = useState(['', '', '', '', '', '']);
+  const [resetEmail, setResetEmail] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -253,9 +254,13 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
                 />
 
                 <div className="text-right">
-                  <a href="#" className="text-xs text-blue-600 hover:underline">
+                  <button
+                    type="button"
+                    onClick={() => setView('forgotPassword')}
+                    className="text-xs text-blue-600 hover:underline"
+                  >
                     Esqueceu a sua palavra-passe?
-                  </a>
+                  </button>
                 </div>
 
                 <Button type="submit" variant="secondary" size="sm" className={`w-full ${isLoading ? '!bg-transparent' : ''}`} disabled={isLoading}>
@@ -278,6 +283,52 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
                   className="text-blue-600 hover:underline font-medium"
                 >
                   Registar-se
+                </button>
+              </p>
+            </>
+          ) : view === 'forgotPassword' ? (
+            <>
+              <h1 className="text-xl font-gt-walsheim font-bold text-gray-800 mb-6">Recuperar Palavra-passe</h1>
+              <p className="text-sm text-gray-600 mb-6">
+                Introduza o seu email e enviaremos um link para redefinir a sua palavra-passe.
+              </p>
+
+              <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); setIsLoading(true); setTimeout(() => { setIsLoading(false); setError(''); alert('Link enviado para ' + resetEmail); }, 1500); }}>
+                {error && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-sm text-red-600">{error}</p>
+                  </div>
+                )}
+                
+                <Input
+                  label="Email"
+                  type="email"
+                  placeholder="exemplo@email.com"
+                  value={resetEmail}
+                  onChange={(e) => setResetEmail(e.target.value)}
+                  required
+                />
+
+                <Button type="submit" variant="secondary" size="sm" className={`w-full ${isLoading ? '!bg-transparent' : ''}`} disabled={isLoading}>
+                  {isLoading ? (
+                    <span className="flex items-center justify-center gap-1.5">
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '100ms' }}></span>
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '200ms' }}></span>
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                      <span className="w-2 h-2 bg-nhonga-500 rounded-full animate-bounce" style={{ animationDelay: '400ms' }}></span>
+                    </span>
+                  ) : 'Enviar Link'}
+                </Button>
+              </form>
+
+              <p className="text-center text-xs text-gray-600 mt-6">
+                <button
+                  onClick={() => setView('login')}
+                  className="text-blue-600 hover:underline font-medium inline-flex items-center gap-1"
+                >
+                  <ArrowLeft className="w-3 h-3" />
+                  Voltar ao Login
                 </button>
               </p>
             </>
@@ -310,29 +361,30 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
                 <div className="flex-1 h-px bg-gray-300"></div>
               </div>
 
-              <form className="space-y-3" onSubmit={handleRegister}>
+              <form className="space-y-2.5" onSubmit={handleRegister}>
                 {error && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                    <p className="text-sm text-red-600">{error}</p>
+                  <div className="p-2 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-xs text-red-600">{error}</p>
                   </div>
                 )}
-                <Input
-                  label="Nome"
-                  type="text"
-                  placeholder="Primeiro nome"
-                  value={registerData.firstName}
-                  onChange={(e) => setRegisterData({ ...registerData, firstName: e.target.value })}
-                  required
-                />
-
-                <Input
-                  label="Sobrenome"
-                  type="text"
-                  placeholder="Último nome"
-                  value={registerData.lastName}
-                  onChange={(e) => setRegisterData({ ...registerData, lastName: e.target.value })}
-                  required
-                />
+                <div className="grid grid-cols-2 gap-2">
+                  <Input
+                    label="Nome"
+                    type="text"
+                    placeholder="Primeiro"
+                    value={registerData.firstName}
+                    onChange={(e) => setRegisterData({ ...registerData, firstName: e.target.value })}
+                    required
+                  />
+                  <Input
+                    label="Sobrenome"
+                    type="text"
+                    placeholder="Último"
+                    value={registerData.lastName}
+                    onChange={(e) => setRegisterData({ ...registerData, lastName: e.target.value })}
+                    required
+                  />
+                </div>
 
                 <Input
                   label="Email"
@@ -344,11 +396,11 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
                 />
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Contacto</label>
+                  <label className="block text-sm text-gray-700 mb-2">Contacto</label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <span className="text-lg">🇲🇿</span>
-                      <span className="ml-2 text-sm text-gray-600">+258</span>
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                      <span className="text-sm">🇲🇿</span>
+                      <span className="ml-1.5 text-sm text-gray-600">+258</span>
                     </div>
                     <input
                       type="tel"
@@ -358,11 +410,10 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
                         const value = e.target.value.replace(/\D/g, '').slice(0, 9);
                         setRegisterData({ ...registerData, phone: value });
                       }}
-                      className="w-full pl-20 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="w-full pl-20 pr-4 py-2 bg-blue-50 border border-blue-100 rounded-md focus:outline-none focus:border-nhonga-500 text-gray-700 placeholder:text-xs"
                       required
                     />
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">Apenas 9 dígitos</p>
                 </div>
 
                 <Input
@@ -378,13 +429,13 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
                       onClick={() => setShowPassword(!showPassword)}
                       className="hover:text-gray-600"
                     >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                     </button>
                   }
                 />
 
                 <Input
-                  label="Confirmar Palavra-passe"
+                  label="Confirmar"
                   type={showConfirmPassword ? 'text' : 'password'}
                   placeholder="Repita a palavra-passe"
                   value={registerData.confirmPassword}
@@ -396,12 +447,12 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       className="hover:text-gray-600"
                     >
-                      {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      {showConfirmPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                     </button>
                   }
                 />
 
-                <p className="text-xs text-gray-500">
+                <p className="text-[10px] text-gray-500 leading-tight">
                   Ao criar uma conta, concorda com os nossos{' '}
                   <a href="#" className="text-blue-600 hover:underline">Termos</a>
                   {' '}e{' '}

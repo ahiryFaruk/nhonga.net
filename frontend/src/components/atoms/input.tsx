@@ -13,7 +13,7 @@ export const Input = ({ label, icon, error, helperText, className = '', ...props
       {label && <label className="block text-sm text-gray-700 mb-2">{label}</label>}
       <div className="relative">
         <input
-          className={`w-full px-4 py-2 bg-blue-50 border border-blue-100 rounded-md focus:outline-none focus:border-nhonga-500 text-gray-700 ${className}`}
+          className={`w-full px-4 py-2 bg-blue-50 border border-blue-100 rounded-md focus:outline-none focus:border-nhonga-500 text-gray-700 placeholder:text-xs ${className}`}
           {...props}
         />
         {icon && <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">{icon}</div>}
