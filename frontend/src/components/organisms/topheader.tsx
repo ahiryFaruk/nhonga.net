@@ -19,24 +19,24 @@ export const TopHeader = ({ activeTab, setActiveTab, onTabClick }: TopHeaderProp
     onTabClick();
   };
   return (
-    <div className="bg-nhonga-1000 border-b border-nhonga-800">
+    <div className="bg-nhonga-1000 dark:bg-nhonga-1000 border-b border-nhonga-200 dark:border-nhonga-800 transition-colors">
       <div className="w-full px-4">
         <div className="flex items-end text-xs">
           {tabs.map((tab, index) => (
             <div key={tab.id} className="flex items-center">
               <button
                 onClick={() => handleTabClick(tab.id)}
-                className={`px-3 py-2 border-b-2 transition-all duration-200 font-medium ${
+                className={`px-3 py-1.5 border-b-2 transition-all duration-200 font-medium text-xs ${
                   activeTab === tab.id
                     ? 'text-white bg-nhonga-900 border-nhonga-500'
-                    : 'text-nhonga-400 hover:text-nhonga-200 hover:bg-nhonga-900/50 border-transparent'
+                    : 'text-nhonga-300 hover:text-white hover:bg-nhonga-900/50 border-transparent'
                 }`}
                 style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}
               >
                 {tab.label}
               </button>
               {index < tabs.length - 1 && (
-                <ChevronRight className="w-3 h-3 text-nhonga-400 mx-1 mb-2" />
+                <ChevronRight className="w-3 h-3 text-nhonga-500 mx-1 mb-1" />
               )}
             </div>
           ))}

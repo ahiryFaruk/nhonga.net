@@ -9,6 +9,7 @@ interface RegisterData {
   firstName: string;
   lastName: string;
   email: string;
+  phone?: string;
   username: string;
   password: string;
   accountType: string;
@@ -24,19 +25,26 @@ interface VerifyOtpData {
 
 export const authAPI = {
   async login(data: LoginData) {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify(data),
-    });
-    
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Erro no login');
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data),
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Erro no login');
+      }
+      
+      return response.json();
+    } catch (err: any) {
+      if (err.name === 'TypeError' && err.message.includes('fetch')) {
+        throw new Error('Erro de conexão. Tente novamente.');
+      }
+      throw err;
     }
-    
-    return response.json();
   },
 
   async register(data: RegisterData) {
@@ -56,26 +64,33 @@ export const authAPI = {
       return response.json();
     } catch (err: any) {
       if (err.name === 'TypeError' && err.message.includes('fetch')) {
-        throw new Error('Não foi possível conectar ao servidor. Verifique se o backend está rodando.');
+        throw new Error('Erro de conexão. Tente novamente.');
       }
       throw err;
     }
   },
 
   async verifyOtp(data: VerifyOtpData) {
-    const response = await fetch(`${API_BASE_URL}/auth/verify-otp`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify(data),
-    });
-    
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Erro na verificação');
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/verify-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data),
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Erro na verificação');
+      }
+      
+      return response.json();
+    } catch (err: any) {
+      if (err.name === 'TypeError' && err.message.includes('fetch')) {
+        throw new Error('Erro de conexão. Tente novamente.');
+      }
+      throw err;
     }
-    
-    return response.json();
   },
 
   async testConnection() {
@@ -83,7 +98,7 @@ export const authAPI = {
       const response = await fetch(`${API_BASE_URL}/auth/test`);
       return response.json();
     } catch (err) {
-      throw new Error('Servidor não está respondendo');
+      throw new Error('Erro de conexão. Tente novamente.');
     }
   },
 };

@@ -223,11 +223,7 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
               </div>
 
               <form className="space-y-3" onSubmit={handleLogin}>
-                {error && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                    <p className="text-sm text-red-600">{error}</p>
-                  </div>
-                )}
+                {error && <p className="text-xs text-red-600">{error}</p>}
                 <Input
                   label="Email"
                   type="email"
@@ -294,11 +290,7 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
               </p>
 
               <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); setIsLoading(true); setTimeout(() => { setIsLoading(false); setError(''); alert('Link enviado para ' + resetEmail); }, 1500); }}>
-                {error && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                    <p className="text-sm text-red-600">{error}</p>
-                  </div>
-                )}
+                {error && <p className="text-xs text-red-600">{error}</p>}
                 
                 <Input
                   label="Email"
@@ -362,11 +354,7 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
               </div>
 
               <form className="space-y-2.5" onSubmit={handleRegister}>
-                {error && (
-                  <div className="p-2 bg-red-50 border border-red-200 rounded-lg">
-                    <p className="text-xs text-red-600">{error}</p>
-                  </div>
-                )}
+                {error && <p className="text-xs text-red-600">{error}</p>}
                 <div className="grid grid-cols-2 gap-2">
                   <Input
                     label="Nome"
@@ -549,11 +537,7 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
               </p>
 
               <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleVerifyOtp(); }}>
-                {error && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                    <p className="text-sm text-red-600">{error}</p>
-                  </div>
-                )}
+                {error && <p className="text-xs text-red-600">{error}</p>}
                 
                 <div className="space-y-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -608,32 +592,24 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
                 Escolha o tipo de conta que melhor se adequa ao seu perfil.
               </p>
 
-              <div className="space-y-3">
-                {error && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                    <p className="text-sm text-red-600">{error}</p>
-                  </div>
-                )}
+              <div className="space-y-2.5">
+                {error && <p className="text-xs text-red-600">{error}</p>}
                 <button
                   type="button"
                   onClick={() => setAccountType('professional')}
-                  className={`group w-full p-6 rounded-2xl text-left transition-all duration-300 backdrop-blur-sm relative overflow-hidden ${
+                  className={`w-full p-4 rounded-lg border transition-all ${
                     accountType === 'professional' 
-                      ? 'bg-gradient-to-br from-nhonga-500/25 to-nhonga-600/35 border-2 border-nhonga-500 shadow-xl shadow-nhonga-500/25 scale-[1.02]' 
-                      : 'bg-white/70 border-2 border-gray-200/80 hover:bg-white/90 hover:border-nhonga-400 hover:shadow-lg hover:scale-[1.01]'
+                      ? 'border-nhonga-500 bg-nhonga-50' 
+                      : 'border-gray-200 hover:border-nhonga-300 hover:bg-gray-50'
                   }`}
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`p-3 rounded-xl transition-all ${
-                      accountType === 'professional'
-                        ? 'bg-nhonga-500 text-white shadow-lg shadow-nhonga-500/30'
-                        : 'bg-gray-100 text-gray-600 group-hover:bg-nhonga-100 group-hover:text-nhonga-600'
-                    }`}>
-                      <User className="w-6 h-6" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-gray-800 mb-2 text-lg">Profissional</h3>
-                      <p className="text-sm text-gray-600 leading-relaxed">Para quem procura oportunidades de emprego e networking</p>
+                  <div className="flex items-center gap-3">
+                    <User className={`w-5 h-5 ${
+                      accountType === 'professional' ? 'text-nhonga-600' : 'text-gray-500'
+                    }`} />
+                    <div className="text-left flex-1">
+                      <h3 className="font-semibold text-sm text-gray-800">Profissional</h3>
+                      <p className="text-xs text-gray-600">Oportunidades de emprego e networking</p>
                     </div>
                   </div>
                 </button>
@@ -641,23 +617,19 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
                 <button
                   type="button"
                   onClick={() => setAccountType('company')}
-                  className={`group w-full p-6 rounded-2xl text-left transition-all duration-300 backdrop-blur-sm relative overflow-hidden ${
+                  className={`w-full p-4 rounded-lg border transition-all ${
                     accountType === 'company' 
-                      ? 'bg-gradient-to-br from-nhonga-500/25 to-nhonga-600/35 border-2 border-nhonga-500 shadow-xl shadow-nhonga-500/25 scale-[1.02]' 
-                      : 'bg-white/70 border-2 border-gray-200/80 hover:bg-white/90 hover:border-nhonga-400 hover:shadow-lg hover:scale-[1.01]'
+                      ? 'border-nhonga-500 bg-nhonga-50' 
+                      : 'border-gray-200 hover:border-nhonga-300 hover:bg-gray-50'
                   }`}
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`p-3 rounded-xl transition-all ${
-                      accountType === 'company'
-                        ? 'bg-nhonga-500 text-white shadow-lg shadow-nhonga-500/30'
-                        : 'bg-gray-100 text-gray-600 group-hover:bg-nhonga-100 group-hover:text-nhonga-600'
-                    }`}>
-                      <Building2 className="w-6 h-6" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-gray-800 mb-2 text-lg">Empresa</h3>
-                      <p className="text-sm text-gray-600 leading-relaxed">Para empresas que procuram talentos e parceiros</p>
+                  <div className="flex items-center gap-3">
+                    <Building2 className={`w-5 h-5 ${
+                      accountType === 'company' ? 'text-nhonga-600' : 'text-gray-500'
+                    }`} />
+                    <div className="text-left flex-1">
+                      <h3 className="font-semibold text-sm text-gray-800">Empresa</h3>
+                      <p className="text-xs text-gray-600">Procura talentos e parceiros</p>
                     </div>
                   </div>
                 </button>
@@ -665,23 +637,19 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
                 <button
                   type="button"
                   onClick={() => setAccountType('freelancer')}
-                  className={`group w-full p-6 rounded-2xl text-left transition-all duration-300 backdrop-blur-sm relative overflow-hidden ${
+                  className={`w-full p-4 rounded-lg border transition-all ${
                     accountType === 'freelancer' 
-                      ? 'bg-gradient-to-br from-nhonga-500/25 to-nhonga-600/35 border-2 border-nhonga-500 shadow-xl shadow-nhonga-500/25 scale-[1.02]' 
-                      : 'bg-white/70 border-2 border-gray-200/80 hover:bg-white/90 hover:border-nhonga-400 hover:shadow-lg hover:scale-[1.01]'
+                      ? 'border-nhonga-500 bg-nhonga-50' 
+                      : 'border-gray-200 hover:border-nhonga-300 hover:bg-gray-50'
                   }`}
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`p-3 rounded-xl transition-all ${
-                      accountType === 'freelancer'
-                        ? 'bg-nhonga-500 text-white shadow-lg shadow-nhonga-500/30'
-                        : 'bg-gray-100 text-gray-600 group-hover:bg-nhonga-100 group-hover:text-nhonga-600'
-                    }`}>
-                      <Briefcase className="w-6 h-6" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-gray-800 mb-2 text-lg">Freelancer</h3>
-                      <p className="text-sm text-gray-600 leading-relaxed">Para prestadores de serviços autónomos</p>
+                  <div className="flex items-center gap-3">
+                    <Briefcase className={`w-5 h-5 ${
+                      accountType === 'freelancer' ? 'text-nhonga-600' : 'text-gray-500'
+                    }`} />
+                    <div className="text-left flex-1">
+                      <h3 className="font-semibold text-sm text-gray-800">Freelancer</h3>
+                      <p className="text-xs text-gray-600">Prestador de serviços autónomo</p>
                     </div>
                   </div>
                 </button>
@@ -689,23 +657,19 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
                 <button
                   type="button"
                   onClick={() => setAccountType('student')}
-                  className={`group w-full p-6 rounded-2xl text-left transition-all duration-300 backdrop-blur-sm relative overflow-hidden ${
+                  className={`w-full p-4 rounded-lg border transition-all ${
                     accountType === 'student' 
-                      ? 'bg-gradient-to-br from-nhonga-500/25 to-nhonga-600/35 border-2 border-nhonga-500 shadow-xl shadow-nhonga-500/25 scale-[1.02]' 
-                      : 'bg-white/70 border-2 border-gray-200/80 hover:bg-white/90 hover:border-nhonga-400 hover:shadow-lg hover:scale-[1.01]'
+                      ? 'border-nhonga-500 bg-nhonga-50' 
+                      : 'border-gray-200 hover:border-nhonga-300 hover:bg-gray-50'
                   }`}
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`p-3 rounded-xl transition-all ${
-                      accountType === 'student'
-                        ? 'bg-nhonga-500 text-white shadow-lg shadow-nhonga-500/30'
-                        : 'bg-gray-100 text-gray-600 group-hover:bg-nhonga-100 group-hover:text-nhonga-600'
-                    }`}>
-                      <User className="w-6 h-6" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-gray-800 mb-2 text-lg">Estudante</h3>
-                      <p className="text-sm text-gray-600 leading-relaxed">Para estudantes em busca de oportunidades acadêmicas</p>
+                  <div className="flex items-center gap-3">
+                    <User className={`w-5 h-5 ${
+                      accountType === 'student' ? 'text-nhonga-600' : 'text-gray-500'
+                    }`} />
+                    <div className="text-left flex-1">
+                      <h3 className="font-semibold text-sm text-gray-800">Estudante</h3>
+                      <p className="text-xs text-gray-600">Oportunidades acadêmicas</p>
                     </div>
                   </div>
                 </button>
@@ -713,23 +677,19 @@ export const Auth = ({ initialView = 'login' }: AuthProps) => {
                 <button
                   type="button"
                   onClick={() => setAccountType('nhonguista')}
-                  className={`group w-full p-6 rounded-2xl text-left transition-all duration-300 backdrop-blur-sm relative overflow-hidden ${
+                  className={`w-full p-4 rounded-lg border transition-all ${
                     accountType === 'nhonguista' 
-                      ? 'bg-gradient-to-br from-nhonga-500/25 to-nhonga-600/35 border-2 border-nhonga-500 shadow-xl shadow-nhonga-500/25 scale-[1.02]' 
-                      : 'bg-white/70 border-2 border-gray-200/80 hover:bg-white/90 hover:border-nhonga-400 hover:shadow-lg hover:scale-[1.01]'
+                      ? 'border-nhonga-500 bg-nhonga-50' 
+                      : 'border-gray-200 hover:border-nhonga-300 hover:bg-gray-50'
                   }`}
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`p-3 rounded-xl transition-all ${
-                      accountType === 'nhonguista'
-                        ? 'bg-nhonga-500 text-white shadow-lg shadow-nhonga-500/30'
-                        : 'bg-gray-100 text-gray-600 group-hover:bg-nhonga-100 group-hover:text-nhonga-600'
-                    }`}>
-                      <User className="w-6 h-6" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-gray-800 mb-2 text-lg">Nhonguista</h3>
-                      <p className="text-sm text-gray-600 leading-relaxed">Membro especial da comunidade nhonga.net</p>
+                  <div className="flex items-center gap-3">
+                    <User className={`w-5 h-5 ${
+                      accountType === 'nhonguista' ? 'text-nhonga-600' : 'text-gray-500'
+                    }`} />
+                    <div className="text-left flex-1">
+                      <h3 className="font-semibold text-sm text-gray-800">Nhonguista</h3>
+                      <p className="text-xs text-gray-600">Membro especial da comunidade</p>
                     </div>
                   </div>
                 </button>

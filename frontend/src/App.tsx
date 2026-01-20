@@ -4,6 +4,7 @@ import { Home } from './components/templates/Home';
 import { Publicacoes } from './components/templates/Publicacoes';
 import { SobreNos } from './components/templates/SobreNos';
 import { Auth } from './pages/public/Auth';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { useState, useEffect } from 'react';
 
 function App() {
@@ -40,7 +41,8 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <ThemeProvider>
+      <div className="min-h-screen bg-white dark:bg-nhonga-1000 transition-colors">
       {activePage !== 'login' && activePage !== 'register' && (
         <>
           <div className={`transition-all duration-300 ${isScrolled ? 'h-0 overflow-hidden' : 'h-auto'}`}>
@@ -55,7 +57,8 @@ function App() {
         {renderContent()}
       </main>
       {/* {activePage !== 'login' && activePage !== 'register' && footer()} */}
-    </div>
+      </div>
+    </ThemeProvider>
   )
 }
 
